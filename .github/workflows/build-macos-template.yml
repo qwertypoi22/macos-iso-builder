@@ -76,6 +76,16 @@ jobs:
           retention-days: 15
           archive: false
 
+      - name: Publish to Release
+        if: ${{ inputs.image_format == 'iso' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: macos-${{ inputs.macos_version }}-${{ inputs.image_format }}-${{ github.run_id }}
+          name: macOS ${{ inputs.macos_version }} Full ${{ inputs.image_format == 'iso' && 'ISO' || 'DMG' }}
+          files: ${{ steps.create_image.outputs.image_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Summary
         if: always()
         run: |
