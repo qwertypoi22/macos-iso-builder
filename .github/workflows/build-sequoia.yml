@@ -12,10 +12,16 @@ on:
           - 'iso'
           - 'dmg'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     if: ${{ inputs.image_format != '' }}
+    permissions:
+      contents: write
     uses: ./.github/workflows/build-macos-template.yml
+    secrets: inherit
     with:
       macos_version: 'Sequoia'
       image_format: ${{ inputs.image_format }}
